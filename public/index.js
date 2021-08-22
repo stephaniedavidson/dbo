@@ -19,9 +19,13 @@ function init() {
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(threeDiv.getBoundingClientRect().width, threeDiv.getBoundingClientRect().height);
-    // renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation);
     threeDiv.appendChild(renderer.domElement);
+
+    const windowResize = () => {
+        renderer.setSize(threeDiv.getBoundingClientRect().width, threeDiv.getBoundingClientRect().height);
+    };
+    window.addEventListener("resize", windowResize);
 }
 
 function animation(time) {
