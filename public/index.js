@@ -3,22 +3,23 @@ import threejsOrbitControls from "https://cdn.skypack.dev/threejs-orbit-controls
 // import GLTFLoader from "https://cdn.skypack.dev/three-gltf-loader";
 import { GLTFLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js";
 
-/**
- * Base
- */
+//*******************************************//
+//**************** THREE ********************//
+//*******************************************//
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
-// Scene
+// SCENE
 const scene = new THREE.Scene();
 
-// Object
-const geometry = new THREE.BufferGeometry();
-const count = 50;
-const positionsArray = new Float32Array(count * 3 * 3);
-for (let i = 0; i < count * 3 * 3; i++) {
-    positionsArray[i] = (Math.random() - 0.5) * 5;
-}
+// OBJECTS
+const pointLight = new THREE.PointLight(0xff0000, 2, 100);
+pointLight.position.set(0, 0, 0);
+scene.add(pointLight);
+
+const sphereSize = 1;
+const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+scene.add(pointLightHelper);
 
 const loader = new GLTFLoader();
 loader.load(
@@ -40,13 +41,6 @@ loader.load(
         console.log("An error happened");
     }
 );
-
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-geometry.setAttribute("position", positionsAttribute);
-
-const material = new THREE.MeshBasicMaterial({ color: 0xf6f93f, wireframe: true });
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
 
 // Sizes
 const sizes = {
@@ -89,11 +83,7 @@ const clock = new THREE.Clock();
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
-
-    // Update controls
     controls.update();
-
-    // Render
     renderer.render(scene, camera);
 
     // Call tick again on the next frame
@@ -103,7 +93,7 @@ const tick = () => {
 tick();
 
 //*******************************************//
-//****************  DRAG ********************//
+//**************** MODAL ********************//
 //*******************************************//
 
 dragElement(document.getElementById("m0dal"));
@@ -144,3 +134,7 @@ function dragElement(elmnt) {
         document.onmousemove = null;
     }
 }
+
+document.getElementById("close").addEventListener("click", (event) => {
+    document.getElementById("m0dal").style.display = "none";
+});
