@@ -1,5 +1,7 @@
 import * as THREE from "https://cdn.skypack.dev/three";
 import threejsOrbitControls from "https://cdn.skypack.dev/threejs-orbit-controls";
+// import GLTFLoader from "https://cdn.skypack.dev/three-gltf-loader";
+import { GLTFLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js";
 
 /**
  * Base
@@ -11,14 +13,33 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 // Object
-
 const geometry = new THREE.BufferGeometry();
-
 const count = 50;
 const positionsArray = new Float32Array(count * 3 * 3);
 for (let i = 0; i < count * 3 * 3; i++) {
     positionsArray[i] = (Math.random() - 0.5) * 5;
 }
+
+const loader = new GLTFLoader();
+loader.load(
+    // resource URL
+    "./rousseau.gltf",
+    // called when the resource is loaded
+    function (gltf) {
+        scene.add(gltf.scene);
+        gltf.animations; // Array<THREE.AnimationClip>
+        gltf.scene; // THREE.Group
+        gltf.scenes; // Array<THREE.Group>
+        gltf.cameras; // Array<THREE.Camera>
+        gltf.asset; // Object
+    },
+    function (xhr) {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (error) {
+        console.log("An error happened");
+    }
+);
 
 const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
 geometry.setAttribute("position", positionsAttribute);
@@ -82,7 +103,7 @@ const tick = () => {
 tick();
 
 //*******************************************//
-//*******************************************//
+//****************  DRAG ********************//
 //*******************************************//
 
 dragElement(document.getElementById("m0dal"));
