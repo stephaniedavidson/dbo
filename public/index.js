@@ -14,9 +14,9 @@ const scene = new THREE.Scene();
 
 // OBJECTS
 const pointLight = new THREE.PointLight(0xff0000, 2, 100);
-pointLight.position.set(0, 0, 0);
+pointLight.position.set(0, 2, 0);
 scene.add(pointLight);
-
+//helper
 const sphereSize = 1;
 const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
 scene.add(pointLightHelper);
@@ -24,9 +24,9 @@ scene.add(pointLightHelper);
 const loader = new GLTFLoader();
 loader.load(
     // resource URL
-    "./rousseau.gltf",
+    "rousseau.gltf",
     // called when the resource is loaded
-    function (gltf) {
+    (gltf) => {
         scene.add(gltf.scene);
         gltf.animations; // Array<THREE.AnimationClip>
         gltf.scene; // THREE.Group
@@ -41,6 +41,38 @@ loader.load(
         console.log("An error happened");
     }
 );
+
+/**
+ * Floor
+ */
+const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(10, 10),
+    new THREE.MeshStandardMaterial({
+        color: "#444444",
+        metalness: 0,
+        roughness: 0.5,
+    })
+);
+floor.receiveShadow = true;
+floor.rotation.x = -Math.PI * 0.5;
+scene.add(floor);
+
+/**
+ * Lights
+ */
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+directionalLight.castShadow = true;
+directionalLight.shadow.mapSize.set(1024, 1024);
+directionalLight.shadow.camera.far = 15;
+directionalLight.shadow.camera.left = -7;
+directionalLight.shadow.camera.top = 7;
+directionalLight.shadow.camera.right = 7;
+directionalLight.shadow.camera.bottom = -7;
+directionalLight.position.set(5, 5, 5);
+scene.add(directionalLight);
 
 // Sizes
 const sizes = {
