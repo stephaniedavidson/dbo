@@ -13,7 +13,7 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 // OBJECTS
-const pointLight = new THREE.PointLight(0xff0000, 2, 100);
+const pointLight = new THREE.PointLight(0xffffff, 2, 100);
 pointLight.position.set(0, 2, 0);
 scene.add(pointLight);
 //helper
@@ -28,6 +28,7 @@ loader.load(
     // called when the resource is loaded
     (gltf) => {
         scene.add(gltf.scene);
+        gltf.scene.scale.set(0.02, 0.02, 0.02);
         gltf.animations; // Array<THREE.AnimationClip>
         gltf.scene; // THREE.Group
         gltf.scenes; // Array<THREE.Group>
@@ -60,7 +61,7 @@ scene.add(floor);
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
@@ -96,7 +97,8 @@ window.addEventListener("resize", () => {
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.z = 3;
+camera.position.x = 6;
+camera.position.y = 1;
 scene.add(camera);
 
 // Controls
