@@ -13,13 +13,6 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 // OBJECTS
-const pointLight = new THREE.PointLight(0xffffff, 2, 100);
-pointLight.position.set(0, 2, 0);
-scene.add(pointLight);
-//helper
-const sphereSize = 1;
-const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
-scene.add(pointLightHelper);
 
 const loader = new GLTFLoader();
 loader.load(
@@ -47,7 +40,7 @@ loader.load(
  * Floor
  */
 const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
+    new THREE.PlaneGeometry(50, 50),
     new THREE.MeshStandardMaterial({
         color: "#444444",
         metalness: 0,
@@ -61,19 +54,30 @@ scene.add(floor);
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-directionalLight.castShadow = true;
-directionalLight.shadow.mapSize.set(1024, 1024);
-directionalLight.shadow.camera.far = 15;
-directionalLight.shadow.camera.left = -7;
-directionalLight.shadow.camera.top = 7;
-directionalLight.shadow.camera.right = 7;
-directionalLight.shadow.camera.bottom = -7;
-directionalLight.position.set(5, 5, 5);
-scene.add(directionalLight);
+const pointLight = new THREE.PointLight(0xffffff, 2, 100);
+pointLight.position.set(2, 5, 0);
+scene.add(pointLight);
+// //helper
+const helperSize = 1;
+const pointLightHelper = new THREE.PointLightHelper(pointLight, helperSize);
+scene.add(pointLightHelper);
+
+// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+// scene.add(ambientLight);
+
+// const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+// directionalLight.castShadow = true;
+// directionalLight.shadow.mapSize.set(1024, 1024);
+// directionalLight.shadow.camera.far = 15;
+// directionalLight.shadow.camera.left = -7;
+// directionalLight.shadow.camera.top = 7;
+// directionalLight.shadow.camera.right = 7;
+// directionalLight.shadow.camera.bottom = -7;
+// directionalLight.position.set(5, 10, 0);
+// scene.add(directionalLight);
+// const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, helperSize);
+// scene.add(directionalLightHelper);
 
 // Sizes
 const sizes = {
@@ -98,12 +102,14 @@ window.addEventListener("resize", () => {
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 camera.position.x = 6;
-camera.position.y = 1;
+camera.position.y = 5;
 scene.add(camera);
 
 // Controls
 const controls = new threejsOrbitControls(camera, canvas);
 controls.enableDamping = true;
+controls.enableZoom = false; //sd
+controls.maxPolarAngle = Math.PI / 2 - 0.1; //sd
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
