@@ -63,23 +63,7 @@ const helperSize = 1;
 const pointLightHelper = new THREE.PointLightHelper(pointLight, helperSize);
 scene.add(pointLightHelper);
 
-// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-// scene.add(ambientLight);
-
-// const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-// directionalLight.castShadow = true;
-// directionalLight.shadow.mapSize.set(1024, 1024);
-// directionalLight.shadow.camera.far = 15;
-// directionalLight.shadow.camera.left = -7;
-// directionalLight.shadow.camera.top = 7;
-// directionalLight.shadow.camera.right = 7;
-// directionalLight.shadow.camera.bottom = -7;
-// directionalLight.position.set(5, 10, 0);
-// scene.add(directionalLight);
-// const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, helperSize);
-// scene.add(directionalLightHelper);
-
-// Sizes
+// SIZES
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight,
@@ -100,16 +84,20 @@ window.addEventListener("resize", () => {
 });
 
 // Camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(90, sizes.width / sizes.height, 1, 100);
 camera.position.x = 6;
-camera.position.y = 5;
+// camera.position.y = 0;
 scene.add(camera);
 
 // Controls
 const controls = new threejsOrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.enableZoom = false; //sd
-controls.maxPolarAngle = Math.PI / 2 - 0.1; //sd
+controls.minPolarAngle = 1; //sd
+controls.maxPolarAngle = Math.PI / 2; //sd
+controls.minAzimuthAngle = -Math.PI / 2 + 2.5; //sd
+controls.maxAzimuthAngle = Math.PI / 2 + 0.5; //sd
+controls.target = new THREE.Vector3(0, 2, 0); //sd
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
