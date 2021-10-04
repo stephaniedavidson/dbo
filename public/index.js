@@ -4,6 +4,10 @@ import * as THREE from "https://cdn.skypack.dev/three";
 import { GLTFLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js";
 import "./modal.js";
 
+//hdri
+import { RGBELoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/RGBELoader.js";
+import { RoughnessMipmapper } from "https://cdn.skypack.dev/three/examples/jsm/utils/RoughnessMipmapper.js";
+
 //*******************************************//
 //**************** THREE ********************//
 //*******************************************//
@@ -13,14 +17,26 @@ const canvas = document.querySelector("canvas.webgl");
 // SCENE
 const scene = new THREE.Scene();
 
-let tubeGltf;
+//HDRI
+
+new RGBELoader().setPath("textures/").load("royal_esplanade_1k.hdr", function (texture) {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = texture;
+    scene.environment = texture;
+    // use of RoughnessMipmapper is optional
+    const roughnessMipmapper = new RoughnessMipmapper(renderer);
+    roughnessMipmapper.dispose();
+    render();
+});
+
+let midtown;
 
 // GLTF
 new GLTFLoader().load(
-    "rousseau_tube.gltf",
+    "midtown.gltf",
     (gltf) => {
         scene.add(gltf.scene);
-        tubeGltf = gltf.scene;
+        midtown = gltf.scene;
         gltf.scene.scale.set(0.02, 0.02, 0.02);
         gltf.animations; // Array<THREE.AnimationClip>
         gltf.scene; // THREE.Group
@@ -47,7 +63,7 @@ const helperSize = 2;
 const pointLightHelper = new THREE.PointLightHelper(pointLight, helperSize);
 scene.add(pointLightHelper);
 
-// SIZES
+// RESIZING
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight,
@@ -70,7 +86,9 @@ window.addEventListener("resize", () => {
 // CAMERA
 const camera = new THREE.PerspectiveCamera(90, sizes.width / sizes.height, 1, 100);
 camera.position.x = 0;
-camera.position.y = 0;
+camera.position.y = 6;
+camera.position.z = 14;
+
 scene.add(camera);
 
 // Controls
@@ -91,13 +109,15 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 // Animate
-const clock = new THREE.Clock();
+// const clock = new THREE.Clock();
 
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
-    // gltf.position.z = Math.sin(elapsedTime / 10);
-    if (tubeGltf) {
-        tubeGltf.position.z += elapsedTime / 100;
+    // const elapsedTime = clock.getElapsedTime();
+    if (midtown) {
+        midtown.rotation.y += 0.004;
+        if (midtown.rotation.y > 33) {
+            midtown.rotation.y = 0;
+        }
     }
     // controls.update();
     renderer.render(scene, camera);
