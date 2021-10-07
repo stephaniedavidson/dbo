@@ -7,22 +7,24 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/G
 import { RGBELoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/RGBELoader.js";
 import { RoughnessMipmapper } from "https://cdn.skypack.dev/three/examples/jsm/utils/RoughnessMipmapper.js";
 
-const split = document.getElementById("split");
-const clients = document.getElementById("clients");
-const gear = document.getElementById("gear");
+if (window.innerWidth > 600) {
+    const split = document.getElementById("split");
+    const clients = document.getElementById("clients");
+    const gear = document.getElementById("gear");
 
-clients.addEventListener("mouseenter", (e) => {
-    split.style.left = "0vw";
-});
-clients.addEventListener("mouseleave", (e) => {
-    split.style.left = "-10vw";
-});
-gear.addEventListener("mouseenter", (e) => {
-    split.style.left = "-20vw";
-});
-gear.addEventListener("mouseleave", (e) => {
-    split.style.left = "-10vw";
-});
+    clients.addEventListener("mouseenter", (e) => {
+        split.style.left = "0vw";
+    });
+    clients.addEventListener("mouseleave", (e) => {
+        split.style.left = "-10vw";
+    });
+    gear.addEventListener("mouseenter", (e) => {
+        split.style.left = "-20vw";
+    });
+    gear.addEventListener("mouseleave", (e) => {
+        split.style.left = "-10vw";
+    });
+}
 
 //*******************************************//
 //**************** THREE ********************//
@@ -35,7 +37,7 @@ const scene = new THREE.Scene();
 
 //HDRI
 
-new RGBELoader().setPath("textures/").load("sticks.hdr", function (texture) {
+new RGBELoader().setPath("textures/").load("logo.hdr", function (texture) {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.background = texture;
     scene.environment = texture;

@@ -9,7 +9,6 @@ html {
     font-size: 100%;
 }
 body {
-    overflow-x: hidden;
     background: black;
     font-family: "Heebo", sans-serif;
 }
@@ -52,7 +51,6 @@ h2 {
 }
 
 #threeWrap {
-    display: inline-block;
     margin: 0;
     width: 80vw;
     height: 100vh;
@@ -68,7 +66,6 @@ h2 {
 } */
 
 .details {
-    display: inline-block;
     margin: 0;
     padding: 1rem;
     width: 20vw;
@@ -76,10 +73,32 @@ h2 {
     font-size: 1.4rem;
 }
 #clients {
-    background: #6495ed;
+    color: #6495ed;
     text-align: right;
 }
-
+ul {
+    list-style-type: none;
+}
 #gear {
-    background: #ff6f00;
+    color: #ff6f00;
+}
+
+@media (max-width: 600px) {
+    #wrap {
+        position: relative;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+    #split {
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        overflow: visible;
+    }
+    .details {
+        width: 100%;
+    }
 }
