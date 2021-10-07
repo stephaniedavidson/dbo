@@ -1,12 +1,28 @@
 import * as THREE from "https://cdn.skypack.dev/three";
-// import threejsOrbitControls from "https://cdn.skypack.dev/threejs-orbit-controls";
+import threejsOrbitControls from "https://cdn.skypack.dev/threejs-orbit-controls";
 // import GLTFLoader from "https://cdn.skypack.dev/three-gltf-loader";
 import { GLTFLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js";
-import "./modal.js";
 
 //hdri
 import { RGBELoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/RGBELoader.js";
 import { RoughnessMipmapper } from "https://cdn.skypack.dev/three/examples/jsm/utils/RoughnessMipmapper.js";
+
+const split = document.getElementById("split");
+const clients = document.getElementById("clients");
+const gear = document.getElementById("gear");
+
+clients.addEventListener("mouseenter", (e) => {
+    split.style.left = "0vw";
+});
+clients.addEventListener("mouseleave", (e) => {
+    split.style.left = "-10vw";
+});
+gear.addEventListener("mouseenter", (e) => {
+    split.style.left = "-20vw";
+});
+gear.addEventListener("mouseleave", (e) => {
+    split.style.left = "-10vw";
+});
 
 //*******************************************//
 //**************** THREE ********************//
@@ -19,7 +35,7 @@ const scene = new THREE.Scene();
 
 //HDRI
 
-new RGBELoader().setPath("textures/").load("royal_esplanade_1k.hdr", function (texture) {
+new RGBELoader().setPath("textures/").load("sticks.hdr", function (texture) {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.background = texture;
     scene.environment = texture;
@@ -33,11 +49,11 @@ let midtown;
 
 // GLTF
 new GLTFLoader().load(
-    "midtown.gltf",
+    "midtown2.gltf",
     (gltf) => {
         scene.add(gltf.scene);
         midtown = gltf.scene;
-        gltf.scene.scale.set(0.02, 0.02, 0.02);
+        gltf.scene.scale.set(0.03, 0.03, 0.03);
         gltf.animations; // Array<THREE.AnimationClip>
         gltf.scene; // THREE.Group
         gltf.scenes; // Array<THREE.Group>
@@ -53,15 +69,17 @@ new GLTFLoader().load(
 );
 
 // LIGHTS
-const pointLight = new THREE.PointLight(0xffffff, 2, 100);
-pointLight.position.set(0, 5, 0);
-pointLight.distance = 30;
+const pointLight = new THREE.PointLight(0x6495ed, 2, 150);
+pointLight.position.set(0, 40, 0);
 scene.add(pointLight);
+const pointLight2 = new THREE.PointLight(0xff6f00, 2, 150);
+pointLight2.position.set(0, -40, 0);
+scene.add(pointLight2);
 
 // helper
-const helperSize = 2;
-const pointLightHelper = new THREE.PointLightHelper(pointLight, helperSize);
-scene.add(pointLightHelper);
+// const helperSize = 2;
+// const pointLightHelper = new THREE.PointLightHelper(pointLight, helperSize);
+// scene.add(pointLightHelper);
 
 // RESIZING
 const sizes = {
@@ -84,17 +102,17 @@ window.addEventListener("resize", () => {
 });
 
 // CAMERA
-const camera = new THREE.PerspectiveCamera(90, sizes.width / sizes.height, 1, 100);
+const camera = new THREE.PerspectiveCamera(110, sizes.width / sizes.height, 1, 100);
 camera.position.x = 0;
-camera.position.y = 6;
-camera.position.z = 14;
+camera.position.y = 0;
+camera.position.z = 30;
 
 scene.add(camera);
 
 // Controls
-// const controls = new threejsOrbitControls(camera, canvas);
-// controls.enableDamping = true;
-// controls.enableZoom = false; //sd
+const controls = new threejsOrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.enableZoom = false; //sd
 // controls.minPolarAngle = 1; //sd
 // controls.maxPolarAngle = Math.PI / 2; //sd
 // controls.minAzimuthAngle = -Math.PI / 2 + 2.5; //sd
@@ -114,10 +132,12 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const tick = () => {
     // const elapsedTime = clock.getElapsedTime();
     if (midtown) {
-        midtown.rotation.y += 0.004;
-        if (midtown.rotation.y > 33) {
-            midtown.rotation.y = 0;
-        }
+        midtown.rotation.y += 0.003;
+        midtown.rotation.x += 0.002;
+        midtown.rotation.z += 0.001;
+        // if (midtown.rotation.y > 33) {
+        //     midtown.rotation.y = 0;
+        // }
     }
     // controls.update();
     renderer.render(scene, camera);
